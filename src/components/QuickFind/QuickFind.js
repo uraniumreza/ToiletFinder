@@ -16,8 +16,6 @@ export default class QuickFind extends Component {
     this.state = {
       position: undefined,
     };
-
-    this.renderMarkers = this.renderMarkers.bind(this);
   }
 
   componentDidMount() {
@@ -38,9 +36,10 @@ export default class QuickFind extends Component {
   }
 
   render() {
-    let collectionOfMarkers;
+    const collectionOfMarkers = [];
     positions.map((obj, index) => {
-      collectionOfMarkers[index] = <MapView.Marker pinColor="#009688" coordinate={obj} />;
+      console.log(obj);
+      collectionOfMarkers[index] = <MapView.Marker pinColor="#FF0" coordinate={obj} />;
     });
 
     console.log(collectionOfMarkers);
@@ -53,7 +52,7 @@ export default class QuickFind extends Component {
       <View style={Styles.container}>
         <MapView style={Styles.map} region={position}>
           {collectionOfMarkers}
-          <MapView.Marker pinColor="#FF0000" coordinate={position} />
+          <MapView.Marker pinColor="#F0FF" coordinate={position} />
         </MapView>
       </View>
     );
