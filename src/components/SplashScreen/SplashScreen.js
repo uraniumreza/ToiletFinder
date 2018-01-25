@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
+import { Button } from 'native-base';
 import Spinner from 'react-native-spinkit';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Styles from './Styles';
 
 export default class SplashScreen extends Component {
@@ -12,16 +14,50 @@ export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      home: false,
+    };
+  }
+
+  componentWillMount() {
+    setTimeout(() => {
+      this.setState({ home: true });
+    }, 2000);
   }
 
   render() {
+    const { home } = this.state;
+    const { navigate } = this.props.navigation;
     return (
-      <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#FFFFFF',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <Image source={require('../../assets/icons/toilet.png')} style={Styles.imgBackground} />
-        <View style={Styles.container}>
-          <Spinner isVisible size={50} type="ThreeBounce" color="#FFF" />
-        </View>
+        <Text style={Styles.title}>Toilet Finder</Text>
+        {home && (
+          <View>
+            <View style={{ marginTop: 40 }} />
+            <Button style={Styles.button} block info onPress={() => console.log('QUICK FIND')}>
+              <MaterialIcons name="location-searching" size={30} color="#fff" align="left" />
+              <Text style={Styles.buttonText}>QUICK FIND</Text>
+            </Button>
+            <View style={{ marginTop: 20 }} />
+            <Button style={Styles.button} block info onPress={() => console.log('MARK TOILET')}>
+              <Ionicons name="md-bookmark" size={30} color="#fff" align="left" />
+              <Text style={Styles.buttonText}>MARK TOILET</Text>
+            </Button>
+          </View>
+        )}
+        {!home && (
+          <View style={Styles.container}>
+            <Spinner isVisible size={50} type="ThreeBounce" color="#009688" />
+          </View>
+        )}
       </View>
     );
   }
