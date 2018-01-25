@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@mapbox/polyline": "^0.2.0",
+    "geolib": "^2.0.24",
     "native-base": "^2.3.7",
     "prop-types": "^15.6.0",
     "react": "16.2.0",
@@ -15,6 +16,7 @@
     "react-native-image-picker": "^0.26.7",
     "react-native-maps": "^0.19.0",
     "react-native-spinkit": "^1.1.1",
+    "react-native-star-rating": "^1.0.8",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.0.0-beta.27"
   },

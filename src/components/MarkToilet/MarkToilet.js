@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { Footer, FooterTab, Button, Icon } from 'native-base';
+import { View, Text, ScrollView } from 'react-native';
+import { List, ListItem, Switch, Body, Right, ActionSheet, Root, Button } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import StarRating from 'react-native-star-rating';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
 import Styles from './Styles';
 import { positions } from '../../constants/ToiletPositions';
+
+const BUTTONS = ['Public', 'Restaurant', 'Shopping Center', 'Gas Station', 'Cancel'];
+const DESTRUCTIVE_INDEX = 4;
+const CANCEL_INDEX = 4;
 
 export default class MarkToilet extends Component {
   static navigationOptions = {
@@ -16,7 +22,11 @@ export default class MarkToilet extends Component {
 
     this.state = {
       position: undefined,
-      selectedTab: '100m',
+      currentPosition: undefined,
+      starCount: 3.5,
+      disabledAccess: false,
+      free: false,
+      selectedType: undefined,
     };
   }
 
@@ -30,6 +40,12 @@ export default class MarkToilet extends Component {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
           },
+          currentPosition: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          },
         });
       },
       (error) => alert(error.message),
@@ -37,8 +53,16 @@ export default class MarkToilet extends Component {
     );
   }
 
+  onStarRatingPress = (rating) => {
+    this.setState({
+      starCount: rating,
+    });
+  };
+
   render() {
-    const { position, selectedTab } = this.state;
+    const {
+      position, currentPosition, disabledAccess, free, selectedType,
+    } = this.state;
 
     const collectionOfMarkers = [];
     positions.map((obj, index) => {
@@ -48,100 +72,115 @@ export default class MarkToilet extends Component {
 
     console.log(position);
 
-    if (!position) {
+    if (!currentPosition) {
       return <Spinner style={Styles.spinner} isVisible size={100} type="Bounce" color="#009688" />;
     }
     return (
-      <View style={Styles.container}>
-        <MapView style={Styles.map} region={position}>
-          {collectionOfMarkers}
-          <MapView.Marker
-            pinColor="#F0FF"
-            coordinate={position}
-            title="My Location"
-            description="Now I am here!"
-          />
-          {/* <MapView.Marker
-            draggable
-            pinColor="green"
-            coordinate={position}
-            onDragEnd={(e) => this.setState({ position: e.nativeEvent.coordinate })}
-          /> */}
-        </MapView>
-        {/* <View style={Styles.footer}>
-          <Text>Toilet Finder</Text>
-        </View> */}
-        <Footer>
-          <FooterTab>
-            <Button
-              vertical
-              style={{
-                borderRightColor: '#FFF',
-                height: 55,
-                borderRightWidth: 1,
-                backgroundColor: selectedTab === '100m' ? '#FF9800' : '#009688',
-              }}
-              active={selectedTab === '100m'}
-              onPress={() => this.setState({ selectedTab: '100m' })}
-            >
-              <Text
-                style={[Styles.footerText, { color: selectedTab === '100m' ? '#464646' : '#FFF' }]}
-              >
-                100m
-              </Text>
-            </Button>
-            <Button
-              vertical
-              style={{
-                borderRightColor: '#FFF',
-                height: 55,
-                borderRightWidth: 1,
-                backgroundColor: selectedTab === '500m' ? '#FF9800' : '#009688',
-              }}
-              active={selectedTab === '500m'}
-              onPress={() => this.setState({ selectedTab: '500m' })}
-            >
-              <Text
-                style={[Styles.footerText, { color: selectedTab === '500m' ? '#464646' : '#FFF' }]}
-              >
-                500m
-              </Text>
-            </Button>
-            <Button
-              vertical
-              style={{
-                borderRightColor: '#FFF',
-                height: 55,
-                borderRightWidth: 1,
-                backgroundColor: selectedTab === '1km' ? '#FF9800' : '#009688',
-              }}
-              active={selectedTab === '1km'}
-              onPress={() => this.setState({ selectedTab: '1km' })}
-            >
-              <Text
-                style={[Styles.footerText, { color: selectedTab === '1km' ? '#464646' : '#FFF' }]}
-              >
-                1km
-              </Text>
-            </Button>
-            <Button
-              vertical
-              style={{
-                height: 55,
-                backgroundColor: selectedTab === '2km' ? '#FF9800' : '#009688',
-              }}
-              active={selectedTab === '2km'}
-              onPress={() => this.setState({ selectedTab: '2km' })}
-            >
-              <Text
-                style={[Styles.footerText, { color: selectedTab === '2km' ? '#464646' : '#FFF' }]}
-              >
-                2km
-              </Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </View>
+      <Root>
+        <View>
+          <View style={Styles.container}>
+            <MapView style={Styles.map} region={currentPosition}>
+              <MapView.Marker
+                draggable
+                pinColor="green"
+                coordinate={position}
+                onDragEnd={(e) => this.setState({ position: e.nativeEvent.coordinate })}
+              />
+            </MapView>
+          </View>
+          <ScrollView>
+            <List>
+              <ListItem>
+                <Body>
+                  <Text style={Styles.listText}>Free</Text>
+                </Body>
+                <Right>
+                  <Switch
+                    onValueChange={(value) => this.setState({ free: value })}
+                    style={{ padding: 3 }}
+                    value={free}
+                  />
+                </Right>
+              </ListItem>
+              <ListItem>
+                <Body>
+                  <Text style={Styles.listText}>Disabled Access</Text>
+                </Body>
+                <Right>
+                  <Switch
+                    onValueChange={(value) => this.setState({ disabledAccess: value })}
+                    style={{ padding: 3 }}
+                    value={disabledAccess}
+                  />
+                </Right>
+              </ListItem>
+              <ListItem>
+                <Body>
+                  <Text style={Styles.listText}>Rating</Text>
+                </Body>
+                <Right>
+                  <StarRating
+                    starSize={22}
+                    starColor="#009688"
+                    disabled={false}
+                    maxStars={5}
+                    rating={this.state.starCount}
+                    selectedStar={(rating) => this.onStarRatingPress(rating)}
+                  />
+                </Right>
+              </ListItem>
+              <ListItem>
+                <Body>
+                  <Text style={Styles.listText}>Place Type</Text>
+                </Body>
+                <Right
+                  style={{
+                    flex: 1,
+                    width: 'auto',
+                  }}
+                >
+                  {(!selectedType || selectedType === 'Cancel') && (
+                    <Icon
+                      onPress={() =>
+                        ActionSheet.show(
+                          {
+                            options: BUTTONS,
+                            cancelButtonIndex: CANCEL_INDEX,
+                            destructiveButtonIndex: DESTRUCTIVE_INDEX,
+                            title: 'Place Type',
+                          },
+                          (buttonIndex) => {
+                            this.setState({ selectedType: BUTTONS[buttonIndex] });
+                          },
+                        )
+                      }
+                      name="keyboard-arrow-right"
+                      size={22}
+                    />
+                  )}
+                  {selectedType &&
+                    selectedType !== 'Cancel' && (
+                      <Text style={[Styles.listText, { fontStyle: 'italic', color: '#009688' }]}>
+                        {selectedType}
+                      </Text>
+                    )}
+                </Right>
+              </ListItem>
+            </List>
+            <View style={{ marginTop: 15 }} />
+            <View style={Styles.buttonsContainer}>
+              <Button style={Styles.button} block info onPress={() => console.log('CANCEL')}>
+                <Text style={Styles.buttonText}>CANCEL</Text>
+              </Button>
+              <View style={{ marginTop: 20 }} />
+              <Button style={Styles.button} block info onPress={() => console.log('ADD')}>
+                <Text style={Styles.buttonText}>ADD</Text>
+              </Button>
+            </View>
+            <View style={{ marginTop: 15 }} />
+          </ScrollView>
+        </View>
+      </Root>
     );
   }
 }

@@ -47,7 +47,7 @@ export default class SplashScreen extends Component {
               <Text style={Styles.buttonText}>QUICK FIND</Text>
             </Button>
             <View style={{ marginTop: 20 }} />
-            <Button style={Styles.button} block info onPress={() => console.log('MARK TOILET')}>
+            <Button style={Styles.button} block info onPress={() => navigate('MarkToilet')}>
               <Ionicons name="md-bookmark" size={30} color="#fff" align="left" />
               <Text style={Styles.buttonText}>MARK TOILET</Text>
             </Button>
