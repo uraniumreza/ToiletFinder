@@ -7,6 +7,7 @@ import geolib from 'geolib';
 
 import Styles from './Styles';
 import { positions } from '../../constants/ToiletPositions';
+import { DEFAULT_PADDING } from '../../constants/ConstantStrings';
 
 export default class QuickFind extends Component {
   static navigationOptions = {
@@ -39,32 +40,39 @@ export default class QuickFind extends Component {
     );
   }
 
+  fitAllMarkers = () => {
+    console.log('object');
+    this.map.fitToCoordinates(positions, {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+    });
+  };
+
   render() {
     const { position, selectedTab } = this.state;
-
-    const collectionOfMarkers = [];
+    let collectionOfMarkers;
 
     if (position) {
-      console.log('>>>>>>>>');
-      let id = 0;
+      collectionOfMarkers = [];
+
       positions.map((obj, index) => {
         const distance = geolib.getDistance(position, obj);
         console.log(distance);
         if (selectedTab === '100m' && distance <= 100) {
-          collectionOfMarkers[id++] = (
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          collectionOfMarkers.push(
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />,
           );
         } else if (selectedTab === '500m' && distance <= 500) {
-          collectionOfMarkers[id++] = (
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          collectionOfMarkers.push(
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />,
           );
         } else if (selectedTab === '1km' && distance <= 1000) {
-          collectionOfMarkers[id++] = (
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          collectionOfMarkers.push(
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />,
           );
         } else if (selectedTab === '2km' && distance <= 2000) {
-          collectionOfMarkers[id++] = (
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          collectionOfMarkers.push(
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />,
           );
         }
       });
@@ -77,7 +85,13 @@ export default class QuickFind extends Component {
     }
     return (
       <View style={Styles.container}>
-        <MapView style={Styles.map} region={position}>
+        <MapView
+          ref={(ref) => {
+            this.map = ref;
+          }}
+          style={Styles.map}
+          region={position}
+        >
           {collectionOfMarkers}
           <MapView.Marker
             pinColor="#F0FF"
@@ -106,7 +120,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '100m' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '100m'}
-              onPress={() => this.setState({ selectedTab: '100m' })}
+              onPress={() => this.setState({ selectedTab: '100m' }, this.fitAllMarkers)}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '100m' ? '#464646' : '#FFF' }]}
@@ -123,7 +137,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '500m' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '500m'}
-              onPress={() => this.setState({ selectedTab: '500m' })}
+              onPress={() => this.setState({ selectedTab: '500m' }, this.fitAllMarkers)}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '500m' ? '#464646' : '#FFF' }]}
@@ -140,7 +154,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '1km' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '1km'}
-              onPress={() => this.setState({ selectedTab: '1km' })}
+              onPress={() => this.setState({ selectedTab: '1km' }, this.fitAllMarkers)}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '1km' ? '#464646' : '#FFF' }]}
@@ -155,7 +169,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '2km' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '2km'}
-              onPress={() => this.setState({ selectedTab: '2km' })}
+              onPress={() => this.setState({ selectedTab: '2km' }, this.fitAllMarkers)}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '2km' ? '#464646' : '#FFF' }]}
