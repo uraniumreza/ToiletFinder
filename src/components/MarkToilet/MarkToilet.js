@@ -6,7 +6,7 @@ import Spinner from 'react-native-spinkit';
 import Styles from './Styles';
 import { positions } from '../../constants/ToiletPositions';
 
-export default class QuickFind extends Component {
+export default class MarkToilet extends Component {
   static navigationOptions = {
     header: null,
   };

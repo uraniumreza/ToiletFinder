@@ -3,6 +3,7 @@ import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
 import SplashScreen from './src/components/SplashScreen/SplashScreen';
 import QuickFind from './src/components/QuickFind/QuickFind';
+import MarkToilet from './src/components/MarkToilet/MarkToilet';
 
 const { width } = Dimensions.get('window');
 
@@ -14,6 +15,9 @@ const Stack = {
   },
   QuickFind: {
     screen: QuickFind,
+  },
+  MarkToilet: {
+    screen: MarkToilet,
   },
 };
 
