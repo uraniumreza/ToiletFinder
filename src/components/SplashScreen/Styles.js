@@ -1,10 +1,3 @@
-/**
- * Mobile Application For duMedico(Patient)
- * Product Developed By: Dubin Labs Ltd.
- * StyleSheet for SplashScreen || Author: Nayeem Reza
- * https://github.com/mostafiz93/DuMedi
- */
-
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');

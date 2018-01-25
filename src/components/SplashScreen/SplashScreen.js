@@ -41,8 +41,8 @@ export default class SplashScreen extends Component {
         <Text style={Styles.title}>Toilet Finder</Text>
         {home && (
           <View>
-            <View style={{ marginTop: 40 }} />
-            <Button style={Styles.button} block info onPress={() => console.log('QUICK FIND')}>
+            <View style={{ marginTop: 50 }} />
+            <Button style={Styles.button} block info onPress={() => navigate('QuickFind')}>
               <MaterialIcons name="location-searching" size={30} color="#fff" align="left" />
               <Text style={Styles.buttonText}>QUICK FIND</Text>
             </Button>

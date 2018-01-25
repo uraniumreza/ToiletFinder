@@ -2,11 +2,7 @@ import { AppRegistry, Dimensions } from 'react-native';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
 import SplashScreen from './src/components/SplashScreen/SplashScreen';
-// import HomePage from './src/components/HomePage/HomePage';
-// import SideMenu from './src/components/SideMenu/SideMenu';
-// import Location from './src/components/Location/Location';
-// import Map from './src/components/Location/Map';
-// import About from './src/components/About/About';
+import QuickFind from './src/components/QuickFind/QuickFind';
 
 const { width } = Dimensions.get('window');
 
@@ -15,6 +11,9 @@ console.disableYellowBox = true;
 const Stack = {
   SplashScreen: {
     screen: SplashScreen,
+  },
+  QuickFind: {
+    screen: QuickFind,
   },
 };
 
