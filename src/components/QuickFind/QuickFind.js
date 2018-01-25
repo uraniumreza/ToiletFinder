@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
+import geolib from 'geolib';
+
 import Styles from './Styles';
 import { positions } from '../../constants/ToiletPositions';
 
@@ -41,12 +43,34 @@ export default class QuickFind extends Component {
     const { position, selectedTab } = this.state;
 
     const collectionOfMarkers = [];
-    positions.map((obj, index) => {
-      console.log(obj);
-      collectionOfMarkers[index] = <MapView.Marker pinColor="#FF9800" coordinate={obj} />;
-    });
 
-    console.log(position);
+    if (position) {
+      console.log('>>>>>>>>');
+      let id = 0;
+      positions.map((obj, index) => {
+        const distance = geolib.getDistance(position, obj);
+        console.log(distance);
+        if (selectedTab === '100m' && distance <= 100) {
+          collectionOfMarkers[id++] = (
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          );
+        } else if (selectedTab === '500m' && distance <= 500) {
+          collectionOfMarkers[id++] = (
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          );
+        } else if (selectedTab === '1km' && distance <= 1000) {
+          collectionOfMarkers[id++] = (
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          );
+        } else if (selectedTab === '2km' && distance <= 2000) {
+          collectionOfMarkers[id++] = (
+            <MapView.Marker key={index} pinColor="#FF9800" coordinate={obj} />
+          );
+        }
+      });
+    }
+
+    // console.log(position);
 
     if (!position) {
       return <Spinner style={Styles.spinner} isVisible size={100} type="Bounce" color="#009688" />;

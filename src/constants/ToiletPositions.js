@@ -23,4 +23,22 @@ export const positions = [
     latitudeDelta: 0.015,
     longitudeDelta: 0.0121,
   },
+  {
+    latitude: 23.788357,
+    longitude: 90.395046,
+    latitudeDelta: 0.015,
+    longitudeDelta: 0.0121,
+  },
+  {
+    latitude: 23.790458,
+    longitude: 90.391699,
+    latitudeDelta: 0.015,
+    longitudeDelta: 0.0121,
+  },
+  {
+    latitude: 23.781343,
+    longitude: 90.400255,
+    latitudeDelta: 0.015,
+    longitudeDelta: 0.0121,
+  },
 ];

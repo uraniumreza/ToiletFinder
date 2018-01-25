@@ -64,14 +64,6 @@ export default class MarkToilet extends Component {
       position, currentPosition, disabledAccess, free, selectedType,
     } = this.state;
 
-    const collectionOfMarkers = [];
-    positions.map((obj, index) => {
-      console.log(obj);
-      collectionOfMarkers[index] = <MapView.Marker pinColor="#FF9800" coordinate={obj} />;
-    });
-
-    console.log(position);
-
     if (!currentPosition) {
       return <Spinner style={Styles.spinner} isVisible size={100} type="Bounce" color="#009688" />;
     }
