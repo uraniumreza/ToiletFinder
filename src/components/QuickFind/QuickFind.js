@@ -70,7 +70,7 @@ export default class QuickFind extends Component {
 
   fitAllMarkers = (coordinates) => {
     if (this.map) {
-      console.log('--->', this.map);
+      // console.log('--->', this.map);
       this.map.fitToCoordinates(coordinates, {
         edgePadding: DEFAULT_PADDING,
         animated: true,
@@ -84,22 +84,22 @@ export default class QuickFind extends Component {
     // let coordinates;
     const collectionOfMarkers = [];
     const coordinates = [];
-    console.log('>>', coordinates);
+    // console.log('>>', coordinates);
     coordinates.push(position);
     positions.map((obj, index) => {
-      console.log(obj);
+      // console.log(obj);
       const {
         coordinate, disabledAccess, free, placeType, rating,
       } = obj.location;
       const distance = geolib.getDistance(position, coordinate);
-      console.log(coordinate);
+      // console.log(coordinate);
       if (selectedTab === '100m' && distance <= 100) {
         coordinates.push(coordinate);
         collectionOfMarkers.push(
           <MapView.Marker
             title={placeType}
-            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
-              { free } ? 'FREE | ' : ''
+            description={`${disabledAccess ? 'Disabled Access | ' : ''} ${
+              free ? 'FREE | ' : ''
             } Rating: ${rating}/5`}
             key={index}
             pinColor="#FF9800"
@@ -111,8 +111,8 @@ export default class QuickFind extends Component {
         collectionOfMarkers.push(
           <MapView.Marker
             title={placeType}
-            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
-              { free } ? 'FREE | ' : ''
+            description={`${disabledAccess ? 'Disabled Access | ' : ''} ${
+              free ? 'FREE | ' : ''
             } Rating: ${rating}/5`}
             key={index}
             pinColor="#FF9800"
@@ -124,8 +124,8 @@ export default class QuickFind extends Component {
         collectionOfMarkers.push(
           <MapView.Marker
             title={placeType}
-            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
-              { free } ? 'FREE | ' : ''
+            description={`${disabledAccess ? 'Disabled Access | ' : ''} ${
+              free ? 'FREE | ' : ''
             } Rating: ${rating}/5`}
             key={index}
             pinColor="#FF9800"
@@ -137,8 +137,8 @@ export default class QuickFind extends Component {
         collectionOfMarkers.push(
           <MapView.Marker
             title={placeType}
-            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
-              { free } ? 'FREE | ' : ''
+            description={`${disabledAccess ? 'Disabled Access | ' : ''} ${
+              free ? 'FREE | ' : ''
             } Rating: ${rating}/5`}
             key={index}
             pinColor="#FF9800"
@@ -148,7 +148,7 @@ export default class QuickFind extends Component {
       }
     });
 
-    console.log(coordinates, '<<');
+    // console.log(coordinates, '<<');
 
     this.fitAllMarkers(coordinates);
 

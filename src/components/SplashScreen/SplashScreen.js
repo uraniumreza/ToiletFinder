@@ -5,6 +5,8 @@ import Spinner from 'react-native-spinkit';
 import firebase from 'firebase';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
+
 import Styles from './Styles';
 
 export default class SplashScreen extends Component {
@@ -82,3 +84,7 @@ export default class SplashScreen extends Component {
     );
   }
 }
+
+SplashScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

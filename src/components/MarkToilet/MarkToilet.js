@@ -6,6 +6,8 @@ import StarRating from 'react-native-star-rating';
 import firebase from 'firebase';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
+import PropTypes from 'prop-types';
+
 import Styles from './Styles';
 import { DEFAULT_PADDING } from '../../constants/ConstantStrings';
 
@@ -102,8 +104,6 @@ export default class MarkToilet extends Component {
           });
         }
       });
-
-    console.log(data);
   };
 
   fitAllMarkers = () => {
@@ -245,3 +245,7 @@ export default class MarkToilet extends Component {
     );
   }
 }
+
+MarkToilet.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

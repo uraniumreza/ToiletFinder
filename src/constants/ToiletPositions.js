@@ -1,3 +1,5 @@
+// DUMMY SEED DATA
+
 export const MARKERS = [
   {
     latitude: 23.781746,
