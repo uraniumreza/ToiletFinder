@@ -21,17 +21,20 @@ export default class SplashScreen extends Component {
   }
 
   componentWillMount() {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyDCvBZUVHBbsEDtf3Q-lldVlQFRMBXblac',
-      authDomain: 'toiletfinder-193210.firebaseapp.com',
-      databaseURL: 'https://toiletfinder-193210.firebaseio.com',
-      projectId: 'toiletfinder-193210',
-      storageBucket: 'toiletfinder-193210.appspot.com',
-      messagingSenderId: '627387251144',
-    });
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+        apiKey: 'AIzaSyDCvBZUVHBbsEDtf3Q-lldVlQFRMBXblac',
+        authDomain: 'toiletfinder-193210.firebaseapp.com',
+        databaseURL: 'https://toiletfinder-193210.firebaseio.com',
+        projectId: 'toiletfinder-193210',
+        storageBucket: 'toiletfinder-193210.appspot.com',
+        messagingSenderId: '627387251144',
+      });
+    }
+
     setTimeout(() => {
       this.setState({ home: true });
-    }, 800);
+    }, 1000);
   }
 
   render() {

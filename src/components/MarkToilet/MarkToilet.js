@@ -3,7 +3,6 @@ import { View, Text, ScrollView } from 'react-native';
 import { List, ListItem, Switch, Body, Right, ActionSheet, Root, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StarRating from 'react-native-star-rating';
-import { NavigationActions } from 'react-navigation';
 import firebase from 'firebase';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
@@ -109,12 +108,8 @@ export default class MarkToilet extends Component {
   };
 
   handleCancel = () => {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'SplashScreen' })],
-    });
-
-    this.props.navigation.dispatch(resetAction);
+    const { goBack } = this.props.navigation;
+    goBack(null);
   };
 
   render() {
