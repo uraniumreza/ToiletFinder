@@ -30,7 +30,6 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new RNSpinkitPackage(),
             new MapsPackage(),
-            new ImagePickerPackage()
       );
     }
 

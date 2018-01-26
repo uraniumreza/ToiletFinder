@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { View, Image, Text, LayoutAnimation, Platform, UIManager } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  BackHandler,
+  ToastAndroid,
+} from 'react-native';
 import { Button, Root } from 'native-base';
 import Spinner from 'react-native-spinkit';
 import firebase from 'firebase';
@@ -43,6 +52,28 @@ export default class SplashScreen extends Component {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
       this.setState({ home: true });
     }, 500);
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton() {
+    const currentTime = moment();
+    let duration;
+    const { lastPress } = this.state;
+    if (lastPress) duration = moment.duration(currentTime.diff(lastPress)).asSeconds();
+    if (duration < 2.5) {
+      BackHandler.exitApp();
+    } else {
+      this.setState({ lastPress: currentTime });
+      ToastAndroid.show('Please tap BACK again to exit!', ToastAndroid.SHORT);
+      return true;
+    }
   }
 
   render() {
