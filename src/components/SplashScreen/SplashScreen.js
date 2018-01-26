@@ -12,6 +12,7 @@ import {
 import { Button, Root } from 'native-base';
 import Spinner from 'react-native-spinkit';
 import firebase from 'firebase';
+import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
@@ -34,6 +35,8 @@ export default class SplashScreen extends Component {
     this.state = {
       home: false,
     };
+
+    this.handleBackButton = this.handleBackButton.bind(this);
   }
 
   componentWillMount() {
