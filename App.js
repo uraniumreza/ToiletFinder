@@ -1,13 +1,9 @@
-import { AppRegistry, Dimensions } from 'react-native';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { AppRegistry } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
 import SplashScreen from './src/components/SplashScreen/SplashScreen';
 import QuickFind from './src/components/QuickFind/QuickFind';
 import MarkToilet from './src/components/MarkToilet/MarkToilet';
-
-const { width } = Dimensions.get('window');
-
-console.disableYellowBox = true;
 
 const Stack = {
   SplashScreen: {
@@ -21,29 +17,7 @@ const Stack = {
   },
 };
 
-const DrawerRoutes = {
-  Home: {
-    screen: StackNavigator(Stack, { initialRouteName: 'SplashScreen' }),
-  },
-};
+const ToiletFinder = StackNavigator({ ...Stack });
+export default ToiletFinder;
 
-const duMedico = StackNavigator(
-  {
-    Drawer: {
-      name: 'Drawer',
-      screen: DrawerNavigator(DrawerRoutes, {
-        drawerWidth: width * 0.65,
-        // contentComponent: SideMenu,
-      }),
-    },
-    ...Stack,
-  },
-  {
-    drawerWidth: 300,
-    headerMode: 'none',
-  },
-);
-
-export default duMedico;
-
-AppRegistry.registerComponent('duMedico', () => duMedico);
+AppRegistry.registerComponent('ToiletFinder', () => ToiletFinder);
