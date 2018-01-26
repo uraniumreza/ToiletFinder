@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Platform, UIManager, LayoutAnimation } from 'react-native';
 import { List, ListItem, Switch, Body, Right, ActionSheet, Root, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StarRating from 'react-native-star-rating';
@@ -21,6 +21,11 @@ export default class MarkToilet extends Component {
   constructor(props) {
     super(props);
 
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
     this.state = {
       position: undefined,
       currentPosition: undefined,
@@ -34,6 +39,7 @@ export default class MarkToilet extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
         this.setState({
           position: {
             latitude: position.coords.latitude,

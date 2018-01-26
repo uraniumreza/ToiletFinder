@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Footer, FooterTab, Button } from 'native-base';
 import MapView from 'react-native-maps';
 import firebase from 'firebase';
@@ -18,6 +18,11 @@ export default class QuickFind extends Component {
   constructor(props) {
     super(props);
 
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
     this.state = {
       positions: undefined,
       position: undefined,
@@ -32,6 +37,7 @@ export default class QuickFind extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
         this.setState({
           position: {
             latitude: position.coords.latitude,

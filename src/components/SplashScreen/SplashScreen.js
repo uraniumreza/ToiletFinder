@@ -15,14 +15,14 @@ export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      home: false,
-    };
-
     if (Platform.OS === 'android') {
       UIManager.setLayoutAnimationEnabledExperimental &&
         UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    this.state = {
+      home: false,
+    };
   }
 
   componentWillMount() {
@@ -36,10 +36,11 @@ export default class SplashScreen extends Component {
         messagingSenderId: '627387251144',
       });
     }
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
     setTimeout(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
       this.setState({ home: true });
-    }, 1000);
+    }, 500);
   }
 
   render() {
