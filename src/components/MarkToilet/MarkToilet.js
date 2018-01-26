@@ -4,10 +4,11 @@ import { List, ListItem, Switch, Body, Right, ActionSheet, Root, Button } from '
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StarRating from 'react-native-star-rating';
 import { NavigationActions } from 'react-navigation';
+import firebase from 'firebase';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
 import Styles from './Styles';
-import { positions } from '../../constants/ToiletPositions';
+import { DEFAULT_PADDING } from '../../constants/ConstantStrings';
 
 const BUTTONS = ['Public', 'Restaurant', 'Shopping Center', 'Gas Station', 'Cancel'];
 const DESTRUCTIVE_INDEX = 4;
@@ -38,14 +39,14 @@ export default class MarkToilet extends Component {
           position: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           },
           currentPosition: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           },
         });
       },
@@ -70,13 +71,41 @@ export default class MarkToilet extends Component {
     const data = {
       free,
       disabledAccess,
-      starCount,
-      selectedType,
-      lat: position.latitude,
-      long: position.longitude,
+      rating: starCount,
+      placeType: selectedType,
+      coordinate: {
+        latitude: position.latitude,
+        longitude: position.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      },
     };
 
+    firebase
+      .database()
+      .ref('/toilets')
+      .push(data, (error) => {
+        if (error) alert('Internal Server Error!');
+        else {
+          alert('Congratulations! You have successfully marked a location!');
+          this.setState({
+            starCount: 3.5,
+            disabledAccess: false,
+            free: false,
+            selectedType: undefined,
+            position: this.state.currentPosition,
+          });
+        }
+      });
+
     console.log(data);
+  };
+
+  fitAllMarkers = () => {
+    this.map.fitToCoordinates([this.state.position, this.state.position], {
+      edgePadding: DEFAULT_PADDING,
+      animated: true,
+    });
   };
 
   handleCancel = () => {
@@ -100,12 +129,22 @@ export default class MarkToilet extends Component {
       <Root>
         <View>
           <View style={Styles.container}>
-            <MapView style={Styles.map} region={currentPosition}>
+            <MapView
+              ref={(ref) => {
+                this.map = ref;
+              }}
+              style={Styles.map}
+              region={position}
+            >
               <MapView.Marker
                 draggable
                 pinColor="green"
                 coordinate={position}
-                onDragEnd={(e) => this.setState({ position: e.nativeEvent.coordinate })}
+                onDragEnd={(e) => {
+                  e.nativeEvent.coordinate.latitudeDelta = 0.01;
+                  e.nativeEvent.coordinate.longitudeDelta = 0.01;
+                  this.setState({ position: e.nativeEvent.coordinate }, () => this.fitAllMarkers());
+                }}
               />
             </MapView>
           </View>
