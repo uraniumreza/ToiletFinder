@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Button, Root } from 'native-base';
 import Spinner from 'react-native-spinkit';
 import firebase from 'firebase';
@@ -18,6 +18,11 @@ export default class SplashScreen extends Component {
     this.state = {
       home: false,
     };
+
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
   }
 
   componentWillMount() {
@@ -31,7 +36,7 @@ export default class SplashScreen extends Component {
         messagingSenderId: '627387251144',
       });
     }
-
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setTimeout(() => {
       this.setState({ home: true });
     }, 1000);

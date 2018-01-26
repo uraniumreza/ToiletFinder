@@ -7,7 +7,7 @@ import Spinner from 'react-native-spinkit';
 import geolib from 'geolib';
 
 import Styles from './Styles';
-// import { positions } from '../../constants/ToiletPositions';
+// import { MARKERS } from '../../constants/ToiletPositions';
 import { DEFAULT_PADDING } from '../../constants/ConstantStrings';
 
 export default class QuickFind extends Component {
@@ -46,7 +46,7 @@ export default class QuickFind extends Component {
     );
   }
 
-  getToiletPositions = () => {
+  getToiletPositions() {
     firebase
       .database()
       .ref('/toilets')
@@ -60,62 +60,99 @@ export default class QuickFind extends Component {
         });
         this.setState({ positions: items });
       });
-  };
+  }
 
   fitAllMarkers = (coordinates) => {
-    // const { positions } = this.state;
-    // const coordinates = [];
-    // positions.map((obj) => {
-    //   coordinates.push(obj.location.coordinate);
-    // });
-    console.log(this);
-    this.map.fitToCoordinates(coordinates, {
-      edgePadding: DEFAULT_PADDING,
-      animated: true,
+    if (this.map) {
+      console.log('--->', this.map);
+      this.map.fitToCoordinates(coordinates, {
+        edgePadding: DEFAULT_PADDING,
+        animated: true,
+      });
+    }
+  };
+
+  renderMarkers = () => {
+    const { selectedTab, position, positions } = this.state;
+    // let collectionOfMarkers;
+    // let coordinates;
+    const collectionOfMarkers = [];
+    const coordinates = [];
+    console.log('>>', coordinates);
+    coordinates.push(position);
+    positions.map((obj, index) => {
+      console.log(obj);
+      const {
+        coordinate, disabledAccess, free, placeType, rating,
+      } = obj.location;
+      const distance = geolib.getDistance(position, coordinate);
+      console.log(coordinate);
+      if (selectedTab === '100m' && distance <= 100) {
+        coordinates.push(coordinate);
+        collectionOfMarkers.push(
+          <MapView.Marker
+            title={placeType}
+            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
+              { free } ? 'FREE | ' : ''
+            } Rating: ${rating}/5`}
+            key={index}
+            pinColor="#FF9800"
+            coordinate={coordinate}
+          />,
+        );
+      } else if (selectedTab === '500m' && distance <= 500) {
+        coordinates.push(coordinate);
+        collectionOfMarkers.push(
+          <MapView.Marker
+            title={placeType}
+            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
+              { free } ? 'FREE | ' : ''
+            } Rating: ${rating}/5`}
+            key={index}
+            pinColor="#FF9800"
+            coordinate={coordinate}
+          />,
+        );
+      } else if (selectedTab === '1km' && distance <= 1000) {
+        coordinates.push(coordinate);
+        collectionOfMarkers.push(
+          <MapView.Marker
+            title={placeType}
+            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
+              { free } ? 'FREE | ' : ''
+            } Rating: ${rating}/5`}
+            key={index}
+            pinColor="#FF9800"
+            coordinate={coordinate}
+          />,
+        );
+      } else if (selectedTab === '2km' && distance <= 2000) {
+        coordinates.push(coordinate);
+        collectionOfMarkers.push(
+          <MapView.Marker
+            title={placeType}
+            description={`${{ disabledAccess } ? 'Disabled Access | ' : ''} ${
+              { free } ? 'FREE | ' : ''
+            } Rating: ${rating}/5`}
+            key={index}
+            pinColor="#FF9800"
+            coordinate={coordinate}
+          />,
+        );
+      }
     });
+
+    console.log(coordinates, '<<');
+
+    this.fitAllMarkers(coordinates);
+
+    return collectionOfMarkers;
   };
 
   render() {
     const { position, selectedTab, positions } = this.state;
-    let collectionOfMarkers;
-    let coordinates;
-    console.log('>>', positions);
 
-    if (position) {
-      collectionOfMarkers = [];
-
-      positions.map((obj, index) => {
-        const { coordinate } = obj.location;
-        coordinates = [position];
-        const distance = geolib.getDistance(position, coordinate);
-        // console.log(distance);
-        if (selectedTab === '100m' && distance <= 100) {
-          coordinates.push(coordinate);
-          collectionOfMarkers.push(
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={coordinate} />,
-          );
-        } else if (selectedTab === '500m' && distance <= 500) {
-          coordinates.push(coordinate);
-          collectionOfMarkers.push(
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={coordinate} />,
-          );
-        } else if (selectedTab === '1km' && distance <= 1000) {
-          coordinates.push(coordinate);
-          collectionOfMarkers.push(
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={coordinate} />,
-          );
-        } else if (selectedTab === '2km' && distance <= 2000) {
-          coordinates.push(coordinate);
-          collectionOfMarkers.push(
-            <MapView.Marker key={index} pinColor="#FF9800" coordinate={coordinate} />,
-          );
-        }
-      });
-    }
-
-    // console.log(position);
-
-    if (!position) {
+    if (!position || !positions) {
       return <Spinner style={Styles.spinner} isVisible size={100} type="Bounce" color="#009688" />;
     }
     return (
@@ -127,23 +164,15 @@ export default class QuickFind extends Component {
           style={Styles.map}
           region={position}
         >
-          {collectionOfMarkers}
+          {this.renderMarkers()}
           <MapView.Marker
             pinColor="#F0FF"
             coordinate={position}
             title="My Location"
             description="Now I am here!"
           />
-          {/* <MapView.Marker
-            draggable
-            pinColor="green"
-            coordinate={position}
-            onDragEnd={(e) => this.setState({ position: e.nativeEvent.coordinate })}
-          /> */}
         </MapView>
-        {/* <View style={Styles.footer}>
-          <Text>Toilet Finder</Text>
-        </View> */}
+
         <Footer>
           <FooterTab>
             <Button
@@ -155,9 +184,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '100m' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '100m'}
-              onPress={() =>
-                this.setState({ selectedTab: '100m' }, this.fitAllMarkers(coordinates))
-              }
+              onPress={() => this.setState({ selectedTab: '100m' })}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '100m' ? '#464646' : '#FFF' }]}
@@ -174,9 +201,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '500m' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '500m'}
-              onPress={() =>
-                this.setState({ selectedTab: '500m' }, this.fitAllMarkers(coordinates))
-              }
+              onPress={() => this.setState({ selectedTab: '500m' })}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '500m' ? '#464646' : '#FFF' }]}
@@ -193,7 +218,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '1km' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '1km'}
-              onPress={() => this.setState({ selectedTab: '1km' }, this.fitAllMarkers(coordinates))}
+              onPress={() => this.setState({ selectedTab: '1km' })}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '1km' ? '#464646' : '#FFF' }]}
@@ -208,7 +233,7 @@ export default class QuickFind extends Component {
                 backgroundColor: selectedTab === '2km' ? '#FF9800' : '#009688',
               }}
               active={selectedTab === '2km'}
-              onPress={() => this.setState({ selectedTab: '2km' }, this.fitAllMarkers(coordinates))}
+              onPress={() => this.setState({ selectedTab: '2km' })}
             >
               <Text
                 style={[Styles.footerText, { color: selectedTab === '2km' ? '#464646' : '#FFF' }]}

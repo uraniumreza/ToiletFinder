@@ -1,4 +1,4 @@
-export const positions = [
+export const MARKERS = [
   {
     latitude: 23.781746,
     longitude: 90.391576,
