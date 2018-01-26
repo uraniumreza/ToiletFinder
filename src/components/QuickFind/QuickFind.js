@@ -41,7 +41,6 @@ export default class QuickFind extends Component {
   }
 
   fitAllMarkers = () => {
-    console.log('object');
     this.map.fitToCoordinates(positions, {
       edgePadding: DEFAULT_PADDING,
       animated: true,

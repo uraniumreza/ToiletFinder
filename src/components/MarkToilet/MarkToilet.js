@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { List, ListItem, Switch, Body, Right, ActionSheet, Root, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import StarRating from 'react-native-star-rating';
+import { NavigationActions } from 'react-navigation';
 import MapView from 'react-native-maps';
 import Spinner from 'react-native-spinkit';
 import Styles from './Styles';
@@ -51,12 +52,40 @@ export default class MarkToilet extends Component {
       (error) => alert(error.message),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
+
+    ActionSheet.actionsheetInstance = null;
   }
 
   onStarRatingPress = (rating) => {
     this.setState({
       starCount: rating,
     });
+  };
+
+  handleAdd = () => {
+    const {
+      free, disabledAccess, starCount, selectedType, position,
+    } = this.state;
+
+    const data = {
+      free,
+      disabledAccess,
+      starCount,
+      selectedType,
+      lat: position.latitude,
+      long: position.longitude,
+    };
+
+    console.log(data);
+  };
+
+  handleCancel = () => {
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'SplashScreen' })],
+    });
+
+    this.props.navigation.dispatch(resetAction);
   };
 
   render() {
@@ -161,11 +190,11 @@ export default class MarkToilet extends Component {
             </List>
             <View style={{ marginTop: 15 }} />
             <View style={Styles.buttonsContainer}>
-              <Button style={Styles.button} block info onPress={() => console.log('CANCEL')}>
+              <Button style={Styles.button} block info onPress={() => this.handleCancel()}>
                 <Text style={Styles.buttonText}>CANCEL</Text>
               </Button>
               <View style={{ marginTop: 20 }} />
-              <Button style={Styles.button} block info onPress={() => console.log('ADD')}>
+              <Button style={Styles.button} block info onPress={() => this.handleAdd()}>
                 <Text style={Styles.buttonText}>ADD</Text>
               </Button>
             </View>
