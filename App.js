@@ -5,6 +5,8 @@ import SplashScreen from './src/components/SplashScreen/SplashScreen';
 import QuickFind from './src/components/QuickFind/QuickFind';
 import MarkToilet from './src/components/MarkToilet/MarkToilet';
 
+console.disableYellowBox = true;
+
 const Stack = {
   SplashScreen: {
     screen: SplashScreen,
