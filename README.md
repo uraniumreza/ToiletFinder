@@ -3,6 +3,13 @@
  
 A react-native app with firebase to find the nearest public toilets!
 
+
+Homepage             |	Mark Toilet		   |	Quick Find             
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://github.com/uraniumreza/ToiletFinder/blob/master/Screenshots/Home.png)  |  ![](https://github.com/uraniumreza/ToiletFinder/blob/master/Screenshots/Mark%20Toilet.png) | ![](https://github.com/uraniumreza/ToiletFinder/blob/master/Screenshots/Quick%20Find.png) 
+
+
+
 ## Description
 
 This is a crowd-sourced *Toilet Finder* mobile app. You can locate all the public toilet facilities around you in a quick glance! Moreover you can add Toilets near you and increase the knowledge base. Finding toilet has become as easy as one click!
