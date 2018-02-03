@@ -27,9 +27,8 @@ This is a crowd-sourced *Toilet Finder* mobile app. You can locate all the publi
 
 ## Tech Stack
 
- - Mobile Application - React Native 
- - REST api & Database - Firebase
+ React Native and Firebase
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+[MIT](https://opensource.org/licenses/MIT) (c) 2018 MD. Nayeem Reza
